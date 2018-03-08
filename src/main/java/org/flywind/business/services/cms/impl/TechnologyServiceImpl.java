@@ -1,17 +1,13 @@
 package org.flywind.business.services.cms.impl;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import org.flywind.business.common.constants.FBaseConstants;
 import org.flywind.business.common.constants.FLogConstants;
 import org.flywind.business.common.utils.FBaseUtil;
 import org.flywind.business.common.utils.FLog;
 import org.flywind.business.dao.base.SysParamDao;
+import org.flywind.business.dao.cms.CategoryDao;
 import org.flywind.business.dao.cms.TechnologyDao;
 import org.flywind.business.entities.base.FSysInfo;
-import org.flywind.business.entities.base.SysParam;
+import org.flywind.business.entities.cms.Category;
 import org.flywind.business.entities.cms.Technology;
 import org.flywind.business.services.cms.TechnologyService;
 import org.flywind.widgets.core.dao.FPage;
@@ -26,6 +22,9 @@ public class TechnologyServiceImpl implements TechnologyService {
 	
 	@Autowired
 	private SysParamDao sysParamDao;
+	
+	@Autowired
+	private CategoryDao categoryDao;
 	
 	@FLog(infokey=FLogConstants.CREATE_TECHNOLOGY, optype = FLogConstants.CREATE)
 	public Long create(Technology o){
@@ -64,14 +63,18 @@ public class TechnologyServiceImpl implements TechnologyService {
 	public List<Technology> findAll(Technology technology, FPage paging, FSysInfo session, String lanage){
 		List<Technology> technologys = technologyDao.findAll(technology, paging, session);
 		
+		FPage p = new FPage();
+		p.setPageSize(50);
+		Category category = new Category();
+		
 		for(Technology t : technologys){
-			List<SysParam> sysParams = sysParamDao.getAllParamByBusinessType(2);
-			for(SysParam s : sysParams){
-				if(s.getParamKey() == t.getTechnologyType()){
+			List<Category> categorys = categoryDao.getAllCategory(category, p, session.getCustomerCode());
+			for(Category s : categorys){
+				if(s.getId().intValue() == t.getTechnologyType()){
 					if("zh-cn".equalsIgnoreCase(lanage)){
-						t.setTechnologyTypeName(s.getParamValue());
+						t.setTechnologyTypeName(s.getName());
 					}else{
-						t.setTechnologyTypeName(s.getParamValueEn());
+						t.setTechnologyTypeName(s.getName());
 					}
 					
 				}
