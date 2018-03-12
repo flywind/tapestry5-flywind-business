@@ -93,32 +93,6 @@ public class Work extends FBase {
 		this.typeName = typeName;
 	}
 	
-	
-	
-	//english
-	private String titleEn;
-	
-	private String contentEn;
-
-	@Column(name = "title_en", nullable = true, length = 200)
-	public String getTitleEn() {
-		return titleEn;
-	}
-
-	public void setTitleEn(String titleEn) {
-		this.titleEn = titleEn;
-	}
-
-
-	@Column(name = "content_en", nullable = true, columnDefinition="TEXT")
-	public String getContentEn() {
-		return contentEn;
-	}
-
-	public void setContentEn(String contentEn) {
-		this.contentEn = contentEn;
-	}
-
 	@Column(name = "is_hot", length = 1)
 	public Boolean getIsHot() {
 		return isHot;
@@ -126,15 +100,6 @@ public class Work extends FBase {
 
 	public void setIsHot(Boolean isHot) {
 		this.isHot = isHot;
-	}
-
-	@Transient
-	public String getSearchTitle() {
-		return searchTitle;
-	}
-
-	public void setSearchTitle(String searchTitle) {
-		this.searchTitle = searchTitle;
 	}
 
 }

@@ -21,9 +21,6 @@ public class TechnologyServiceImpl implements TechnologyService {
 	private TechnologyDao technologyDao;
 	
 	@Autowired
-	private SysParamDao sysParamDao;
-	
-	@Autowired
 	private CategoryDao categoryDao;
 	
 	@FLog(infokey=FLogConstants.CREATE_TECHNOLOGY, optype = FLogConstants.CREATE)

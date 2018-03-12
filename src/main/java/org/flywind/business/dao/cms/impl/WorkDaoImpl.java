@@ -43,12 +43,7 @@ public class WorkDaoImpl extends AbstractFBaseDao<Work> implements WorkDao {
 				params.put("title", "%" + example.getTitle().trim() + "%");
 			}
 			
-			if (StringUtils.isNoneBlank(example.getTitleEn())) {
-				condition.append(" and titleEn LIKE :titleEn");
-				params.put("titleEn", "%" + example.getTitleEn().trim() + "%");
-			}
-			
-			if (example.getType() != 0){
+			if (example.getType() != null){
 				condition.append(" and type =:type");
 				params.put("type", example.getType());
 			}
@@ -90,6 +85,9 @@ public class WorkDaoImpl extends AbstractFBaseDao<Work> implements WorkDao {
 		Long count = super.count(countHql.toString(), params);
 		paging.setRowCount(count.intValue());
 		
+		int totalPages = JQueryUtils.findTotalPages(count.intValue(), paging.getPageSize());
+		paging.setPageCount(totalPages);
+		
 		hql.append(condition);
 		return super.query(hql.toString(), params, paging.getPageNumber(), paging.getPageSize());
 	}
@@ -111,14 +109,6 @@ public class WorkDaoImpl extends AbstractFBaseDao<Work> implements WorkDao {
 			params.put("title", "%"+example.getTitle()+"%");
 			countHql += " and title like:title";
 			paramsc.put("title", "%"+example.getTitle()+"%");
-			
-		}
-		
-		if(StringUtils.isNotEmpty(example.getTitleEn())){
-			hql += " and titleEn like:titleEn";
-			params.put("titleEn", "%"+example.getTitleEn()+"%");
-			countHql += " and titleEn like:titleEn";
-			paramsc.put("titleEn", "%"+example.getTitleEn()+"%");
 			
 		}
 

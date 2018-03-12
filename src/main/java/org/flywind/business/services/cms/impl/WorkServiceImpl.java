@@ -5,10 +5,10 @@ import java.util.List;
 import org.flywind.business.common.constants.FLogConstants;
 import org.flywind.business.common.utils.FBaseUtil;
 import org.flywind.business.common.utils.FLog;
-import org.flywind.business.dao.base.SysParamDao;
+import org.flywind.business.dao.cms.CategoryDao;
 import org.flywind.business.dao.cms.WorkDao;
 import org.flywind.business.entities.base.FSysInfo;
-import org.flywind.business.entities.base.SysParam;
+import org.flywind.business.entities.cms.Category;
 import org.flywind.business.entities.cms.Work;
 import org.flywind.business.services.cms.WorkService;
 import org.flywind.widgets.core.dao.FPage;
@@ -22,7 +22,7 @@ public class WorkServiceImpl implements WorkService {
 	private WorkDao exampleDao;
 	
 	@Autowired
-	private SysParamDao sysParamDao;
+	private CategoryDao categoryDao;
 	
 	@FLog(infokey=FLogConstants.CREATE_WORK, optype = FLogConstants.CREATE)
 	public Long create(Work o){
@@ -61,14 +61,18 @@ public class WorkServiceImpl implements WorkService {
 	public List<Work> findAll(Work example, FPage paging, FSysInfo session, String lanage){
 		List<Work> list = exampleDao.findAll(example, paging, session);
 		
+		FPage p = new FPage();
+		p.setPageSize(50);
+		Category category = new Category();
+		
 		for(Work t : list){
-			List<SysParam> sysParams = sysParamDao.getAllParamByBusinessType(3);
-			for(SysParam s : sysParams){
-				if(s.getParamKey() == t.getType()){
+			List<Category> categorys = categoryDao.getAllCategory(category, p, session.getCustomerCode());
+			for(Category s : categorys){
+				if(s.getId().intValue() == t.getType()){
 					if("zh-cn".equalsIgnoreCase(lanage)){
-						t.setTypeName(s.getParamValue());
+						t.setTypeName(s.getName());
 					}else{
-						t.setTypeName(s.getParamValueEn());
+						t.setTypeName(s.getName());
 					}
 					
 				}
