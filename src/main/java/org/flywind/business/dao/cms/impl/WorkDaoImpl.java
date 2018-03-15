@@ -66,14 +66,18 @@ public class WorkDaoImpl extends AbstractFBaseDao<Work> implements WorkDao {
 		StringBuilder hql = new StringBuilder("FROM Work");
 		StringBuilder countHql = new StringBuilder("SELECT COUNT(id) FROM Work");
 		StringBuilder condition = new StringBuilder(" WHERE customerCode = :customerCode");
-		condition.append(" and type =:type");
+		
 		
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put(FBaseConstants.CUSTOMER_CODE, customerCode);
-		params.put("type", example.getType());
 		
-		if (null != example.getTitle()) {
-			condition.append(" AND name LIKE :title");
+		if(example.getType() != null){
+			condition.append(" and type =:type");
+			params.put("type", example.getType());
+		}
+		
+		if (StringUtils.isNoneBlank(example.getTitle())) {
+			condition.append(" AND title LIKE :title");
 			params.put("title", "%" + example.getTitle().trim() + "%");
 		}
 		
