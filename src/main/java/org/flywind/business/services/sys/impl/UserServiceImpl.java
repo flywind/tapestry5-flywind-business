@@ -14,6 +14,7 @@ import org.flywind.business.common.exception.FExceptionKey;
 import org.flywind.business.common.result.Json;
 import org.flywind.business.common.utils.FBaseUtil;
 import org.flywind.business.common.utils.FLog;
+import org.flywind.business.dao.cms.WorkUserLikeDao;
 import org.flywind.business.dao.sys.OrganizationDao;
 import org.flywind.business.dao.sys.ResourceDao;
 import org.flywind.business.dao.sys.RoleDao;
@@ -48,6 +49,9 @@ public class UserServiceImpl implements UserService {
 	private UserRoleDao userRoleDao;
 	@Autowired
 	private OrganizationDao organizationDao;
+	
+	@Autowired
+	private WorkUserLikeDao workUserLikeDao;
 
 	@Override
 	@FLog(infokey = FLogConstants.CREATE_USER, optype = FLogConstants.CREATE, logtype = FLogConstants.SYS_LOG)
@@ -66,6 +70,7 @@ public class UserServiceImpl implements UserService {
 	public void deleteUser(User user) {
 		
 		userRoleDao.delUserRoleByUserId(user.getId());
+		workUserLikeDao.delWorkUserLikeByUserId(user.getId());
 		userDao.deleteById(User.class, user.getId());
 	}
 	

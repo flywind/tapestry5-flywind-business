@@ -43,6 +43,10 @@ public class Work extends FBase {
 	 */
 	private Boolean isHot = Boolean.FALSE;
 	
+	private Boolean isLike = Boolean.FALSE;
+	
+	private Long totalLikes;
+	
 	/**
 	 * Content
 	 */
@@ -100,6 +104,24 @@ public class Work extends FBase {
 
 	public void setIsHot(Boolean isHot) {
 		this.isHot = isHot;
+	}
+
+	@Transient
+	public Boolean getIsLike() {
+		return isLike;
+	}
+
+	public void setIsLike(Boolean isLike) {
+		this.isLike = isLike;
+	}
+
+	@Transient
+	public Long getTotalLikes() {
+		return totalLikes;
+	}
+
+	public void setTotalLikes(Long totalLikes) {
+		this.totalLikes = totalLikes;
 	}
 
 }

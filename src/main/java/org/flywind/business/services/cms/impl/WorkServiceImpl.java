@@ -7,9 +7,11 @@ import org.flywind.business.common.utils.FBaseUtil;
 import org.flywind.business.common.utils.FLog;
 import org.flywind.business.dao.cms.CategoryDao;
 import org.flywind.business.dao.cms.WorkDao;
+import org.flywind.business.dao.cms.WorkUserLikeDao;
 import org.flywind.business.entities.base.FSysInfo;
 import org.flywind.business.entities.cms.Category;
 import org.flywind.business.entities.cms.Work;
+import org.flywind.business.entities.cms.WorkUserLike;
 import org.flywind.business.services.cms.WorkService;
 import org.flywind.widgets.core.dao.FPage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class WorkServiceImpl implements WorkService {
 	
 	@Autowired
 	private CategoryDao categoryDao;
+	
+	@Autowired
+	private WorkUserLikeDao workUserLikeDao;
 	
 	@FLog(infokey=FLogConstants.CREATE_WORK, optype = FLogConstants.CREATE)
 	public Long create(Work o){
@@ -87,6 +92,30 @@ public class WorkServiceImpl implements WorkService {
 		return exampleDao.findAll(example, paging, customerCode);
 	}
 	
+	public List<Work> findAllPictures(Work example, FPage paging, Long userId, String customerCode){
+		List<Work> works = exampleDao.findAll(example, paging, customerCode);
+		if(userId != 0L){
+			for(Work w : works){
+				boolean checkWorkLikeExist = workUserLikeDao.checkWorkLikeExist(w.getId(), userId);
+				Long totalLikes = workUserLikeDao.countWorkUserLikeByWorkId(w.getId());
+				if(checkWorkLikeExist){
+					w.setIsLike(Boolean.TRUE);
+				}
+				if(totalLikes > 0L){
+					w.setTotalLikes(totalLikes);
+				}
+			}
+		}else{
+			for(Work w : works){
+				Long totalLikes = workUserLikeDao.countWorkUserLikeByWorkId(w.getId());
+				if(totalLikes > 0L){
+					w.setTotalLikes(totalLikes);
+				}
+			}
+		}
+		return works;
+	}
+	
 	//@FLog(infokey=FLogConstants.QUERY_WORK)
 	public List<Work> getListForLoop(Work example, FPage page, String customerCode){
 		return exampleDao.getListForLoop(example, page, customerCode);
@@ -99,5 +128,30 @@ public class WorkServiceImpl implements WorkService {
 	
 	public List<Work> getAllList(Work example, FPage page, String customerCode){
 		return exampleDao.getAllList(example, page, customerCode);
+	}
+	
+	public boolean createWorkUserLike(WorkUserLike o){
+		boolean checkExitLike = workUserLikeDao.checkWorkLikeExist(o.getWorkId(), o.getUserId());
+		if(checkExitLike){
+			workUserLikeDao.deleteWorkUserLike(o.getWorkId(), o.getUserId());
+			return false;
+		}
+		workUserLikeDao.save(o);
+		return true;
+	}
+	
+	public Long getAllLikesByWorkId(Long workId){
+		return workUserLikeDao.countWorkUserLikeByWorkId(workId);
+	}
+	
+	@Override
+	public List<WorkUserLike> getWorkLikesByUserId(Long userId, FPage page, String customerCode){
+		List<WorkUserLike> wuls = workUserLikeDao.getWorkUserLikeByUserId(userId, page);
+		for(WorkUserLike wul : wuls){
+			Work w = exampleDao.getById(Work.class, wul.getWorkId());
+			w.setIsLike(Boolean.TRUE);
+			wul.setLikeWork(w);
+		}
+		return wuls;
 	}
 }

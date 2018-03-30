@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.flywind.business.entities.base.FSysInfo;
 import org.flywind.business.entities.cms.Work;
+import org.flywind.business.entities.cms.WorkUserLike;
 import org.flywind.widgets.core.dao.FPage;
 
 /**
@@ -33,9 +34,17 @@ public interface WorkService {
 	
 	public List<Work> findAll(Work example, FPage paging, String customerCode);
 	
+	public List<Work> findAllPictures(Work example, FPage paging, Long userId, String customerCode);
+	
 	public List<Work> getListForLoop(Work example, FPage paging, String customerCode);
 	
 	public List<Work> getListForHot(Work example, FPage paging, String customerCode);
 	
 	public List<Work> getAllList(Work example, FPage page, String customerCode);
+	
+	public boolean createWorkUserLike(WorkUserLike o);
+	
+	public Long getAllLikesByWorkId(Long workId);
+	
+	public List<WorkUserLike> getWorkLikesByUserId(Long userId, FPage page, String customerCode);
 }
