@@ -67,18 +67,46 @@ public class TechnologyDaoImpl extends AbstractFBaseDao<Technology> implements T
 	}
 	
 	@Override
+	public Long countTechnologys(Technology technology, FPage paging, String customerCode){
+		StringBuilder countHql = new StringBuilder("SELECT COUNT(id) FROM Technology");
+		StringBuilder condition = new StringBuilder(" WHERE customerCode = :customerCode");
+
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put(FBaseConstants.CUSTOMER_CODE, customerCode);
+		if(null != technology.getTechnologyType()){
+			condition.append(" and technologyType =:technologyType");
+			params.put("technologyType", technology.getTechnologyType());
+		}
+
+		if (null != technology.getTitle()) {
+			condition.append(" AND title LIKE :title");
+			params.put("title", "%" + technology.getTitle().trim() + "%");
+		}
+		
+		if (null != paging) { 
+			condition.append(" order by " + paging.getSortName() + " " + paging.getSortOrder());
+		}
+		
+		countHql.append(condition);
+		
+		return super.count(countHql.toString(), params);
+	}
+	
+	@Override
 	public List<Technology> findAll(Technology technology, FPage paging, String customerCode) {
 		StringBuilder hql = new StringBuilder("FROM Technology");
 		StringBuilder countHql = new StringBuilder("SELECT COUNT(id) FROM Technology");
 		StringBuilder condition = new StringBuilder(" WHERE customerCode = :customerCode");
-		condition.append(" and technologyType =:technologyType");
-		
+
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put(FBaseConstants.CUSTOMER_CODE, customerCode);
-		params.put("technologyType", technology.getTechnologyType());
-		
+		if(null != technology.getTechnologyType()){
+			condition.append(" and technologyType =:technologyType");
+			params.put("technologyType", technology.getTechnologyType());
+		}
+
 		if (null != technology.getTitle()) {
-			condition.append(" AND name LIKE :title");
+			condition.append(" AND title LIKE :title");
 			params.put("title", "%" + technology.getTitle().trim() + "%");
 		}
 		

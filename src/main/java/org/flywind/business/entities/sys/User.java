@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.flywind.business.entities.base.FBase;
 import org.hibernate.annotations.Cache;
@@ -19,6 +20,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * @since 1.0
  */
 @Entity
+@XmlRootElement(name = "td_s_user")
 @Table(name="td_s_user")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region="javaClassName")
 public class User extends FBase{

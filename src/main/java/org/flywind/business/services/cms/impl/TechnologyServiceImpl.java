@@ -7,6 +7,7 @@ import org.flywind.business.dao.base.SysParamDao;
 import org.flywind.business.dao.cms.CategoryDao;
 import org.flywind.business.dao.cms.TechnologyDao;
 import org.flywind.business.entities.base.FSysInfo;
+import org.flywind.business.entities.base.Grid;
 import org.flywind.business.entities.cms.Category;
 import org.flywind.business.entities.cms.Technology;
 import org.flywind.business.services.cms.TechnologyService;
@@ -98,5 +99,14 @@ public class TechnologyServiceImpl implements TechnologyService {
 	
 	public boolean hasTechnologyUsed(Integer technologyType){
 		return technologyDao.hasTechnologyUsed(technologyType);
+	}
+	
+	public Grid getAllTechnologys(Technology technology, FPage paging, String customerCode){
+		List<Technology> technologys = technologyDao.findAll(technology, paging, customerCode);
+		Long totals = technologyDao.countTechnologys(technology, paging, customerCode);
+		Grid grid = new Grid();
+		grid.setData(technologys);
+		grid.setRows(totals.intValue());
+		return grid;
 	}
 }

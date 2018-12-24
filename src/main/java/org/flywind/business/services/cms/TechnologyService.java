@@ -3,6 +3,7 @@ package org.flywind.business.services.cms;
 import java.util.List;
 
 import org.flywind.business.entities.base.FSysInfo;
+import org.flywind.business.entities.base.Grid;
 import org.flywind.business.entities.cms.Technology;
 import org.flywind.widgets.core.dao.FPage;
 
@@ -140,4 +141,6 @@ public interface TechnologyService {
 	public List<Technology> getListForHot(Technology technology, FPage paging, String customerCode);
 	
 	public boolean hasTechnologyUsed(Integer technologyType);
+	
+	public Grid getAllTechnologys(Technology technology, FPage paging, String customerCode);
 }

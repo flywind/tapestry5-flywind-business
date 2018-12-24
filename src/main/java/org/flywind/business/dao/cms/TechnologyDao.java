@@ -79,4 +79,6 @@ public interface TechnologyDao extends FBaseDao<Technology>{
 	public List<Technology> getListForHot(Technology example, FPage page, String customerCode);
 	
 	public boolean hasTechnologyUsed(Integer technologyType);
+	
+	public Long countTechnologys(Technology technology, FPage paging, String customerCode);
 }
