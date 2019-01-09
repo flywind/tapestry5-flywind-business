@@ -105,7 +105,7 @@ public class TechnologyServiceImpl implements TechnologyService {
 		List<Technology> technologys = technologyDao.findAll(technology, paging, customerCode);
 		Long totals = technologyDao.countTechnologys(technology, paging, customerCode);
 		Grid grid = new Grid();
-		grid.setData(technologys);
+		grid.setList(technologys);
 		grid.setRows(totals.intValue());
 		return grid;
 	}

@@ -7,26 +7,19 @@ public class Grid implements Serializable {
 	
 	private static final long serialVersionUID = 1970259824146576792L;
 	
-	private List<?> data;
+	private List<?> list;
+	
+	private Object row;
+	
+	private Integer code;
+	
+	private String message;
 	
 	/**
 	 * 总记录数
 	 */
 	private int rows = 0;
 
-	/**
-	 * @return the data
-	 */
-	public List<?> getData() {
-		return data;
-	}
-
-	/**
-	 * @param data the data to set
-	 */
-	public void setData(List<?> data) {
-		this.data = data;
-	}
 
 	/**
 	 * @return the rowCount
@@ -42,9 +35,36 @@ public class Grid implements Serializable {
 		this.rows = rows;
 	}
 
-	
+	public Integer getCode() {
+		return code;
+	}
 
-	
-	
+	public void setCode(Integer code) {
+		this.code = code;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public List<?> getList() {
+		return list;
+	}
+
+	public void setList(List<?> list) {
+		this.list = list;
+	}
+
+	public Object getRow() {
+		return row;
+	}
+
+	public void setRow(Object row) {
+		this.row = row;
+	}
 	
 }
